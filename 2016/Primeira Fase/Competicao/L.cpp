@@ -47,7 +47,7 @@ int main() {
             if(!visited[i][j])
                 ans =  min(ans, dfs(i, j, grid[i][j]));
     
-    cout << ans;
+    cout << ans << endl;
 
     return 0;
 }
