@@ -1,32 +1,51 @@
 #include <iostream>
 #include <algorithm>
+#include <stack>
+#include <utility>
 
 #define valid(i, j) ( 0 <= i && i < H && 0 <= j && j < L)
 #define MAXH 200
 #define MAXL 200
 #define INFINITE 0x3F3F3F3F
+#define mk(a, b) make_pair(a, b)
 
 using namespace std;
+
+typedef pair<int, int> pii;
 
 int grid[MAXH][MAXL];
 int H, L;
 bool visited[MAXH][MAXL];
 
 int dfs(int x, int y, int v) {
-    int weight = 1;
+    stack<pii> stack;
+    int weight = 0;
     int directions[][2] = { {0, 1},
                            {1, 0},
                            {0, -1},
                            {-1, 0} };
 
-    visited[x][y] = true;
+    stack.push(mk(x, y));
 
-    for(int i=0; i<4; i++) {
-        int k = x + directions[i][0];
-        int l = y + directions[i][1];
+    while(!stack.empty() ) {
+        pii pair = stack.top();
+        stack.pop();
+        x = pair.first;
+        y = pair.second;
 
-        if(valid(k, l) && grid[k][l] == v && !visited[k][l])
-            weight += dfs(k, l, v);
+        if(!visited[x][y]) {
+            visited[x][y] = true;
+
+            for(int i=0; i<4; i++) {
+                int k = x + directions[i][0];
+                int l = y + directions[i][1];
+
+                if(valid(k, l) && grid[k][l] == v && !visited[k][l])
+                    stack.push(mk(k, l));
+            }
+
+            weight++;
+        }
     }
     
     return weight;
